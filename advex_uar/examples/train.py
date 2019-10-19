@@ -1,8 +1,14 @@
+import os
+import sys
+
 import click
 
 import horovod.torch as hvd
 import torch
 import numpy as np
+
+base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
+sys.path.append(base)
 
 from advex_uar.train import ImagenetTrainer, CIFAR10Trainer
 from advex_uar.common.pyt_common import *
