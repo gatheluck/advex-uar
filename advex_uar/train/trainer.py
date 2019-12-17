@@ -1,5 +1,6 @@
 import importlib
 import os
+import sys
 import time
 
 import torch
@@ -9,6 +10,9 @@ import torch.utils.data.distributed
 import torchvision
 from torchvision import datasets, transforms, models
 import horovod.torch as hvd
+
+base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
+sys.path.append(base)
 
 from advex_uar.common.loader import StridedImageFolder
 

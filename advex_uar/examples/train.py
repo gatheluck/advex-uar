@@ -1,8 +1,14 @@
+import os
+import sys
+
 import click
 
 import horovod.torch as hvd
 import torch
 import numpy as np
+
+base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
+sys.path.append(base)
 
 from advex_uar.train import ImagenetTrainer, CIFAR10Trainer
 from advex_uar.common.pyt_common import *
@@ -75,7 +81,7 @@ def train(**flag_kwargs):
 @click.option("--batch_size", default=32)
 @click.option("--epochs", default=90)
 @click.option("--label_smoothing", default=0.0)
-@click.option("--checkpoint_dir", default=None, "Location to write the final ckpt to")
+@click.option("--checkpoint_dir", default=None, help="Location to write the final ckpt to")
 @click.option("--use_fp16/--no_fp16", is_flag=True, default=False)
 
 # Adversarial training options
