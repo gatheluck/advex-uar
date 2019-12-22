@@ -66,6 +66,11 @@ ATTACKS = {
     'snow'      : [0.25,     0.5,      1],
 }
 
+# make deterministic
+torch.manual_seed(0)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
 def get_step_size(epsilon, n_iters, use_max=False):
     if use_max:
         return epsilon
@@ -204,15 +209,16 @@ def main(**flags):
         model.eval()
         model = model.cuda()
 
-        for attack_method, eps_list in tqdm.tqdm(attacks.items()):
-            if attack_method not in ATTACK_METHODS: raise ValueError
+        for i, (x,t) in enumerate(loader):
+            x, t = x.cuda(), t.cuda()
+            x_unnormalized = unnormalize(x.detach(), MEAN, STD)
 
-            for eps in eps_list:
-                step_size = get_step_size(eps, n_iters, use_max=False)
+            for attack_method, eps_list in tqdm.tqdm(attacks.items()):
+                if attack_method not in ATTACK_METHODS: raise ValueError
 
-                for i, (x,t) in enumerate(loader):
-                    x, t = x.cuda(), t.cuda()
-                    x_unnormalized = unnormalize(x.detach(), MEAN, STD)
+                for eps in eps_list:
+                    step_size = get_step_size(eps, n_iters, use_max=False)
+
 
                     attack = get_attack(dataset, attack_method, eps, n_iters, step_size, scale_each)
                     attack = attack()
@@ -236,7 +242,7 @@ def main(**flags):
 
                         torchvision.utils.save_image(out, save_path)
 
-                if i==0: break
+            if i==0: break
 
 if __name__ == "__main__":
     main()
