@@ -58,20 +58,30 @@ class InverseImagenetTransform(nn.Module):
         return x
 
 class PixelModel(nn.Module):
+    """
+    CNN model for pixel space input ([0, 255])
+    """
     def __init__(self, model, resol):
+        """
+        Args:
+        - model: model which take unit space image as input
+        - resol: resolution of input image 
+        """
         super().__init__()
         self.model = model
         self.transform = ImagenetTransform(resol)
 
-    def forward(self, x):
-        '''
-        Parameters:
-            x: input image with pixels normalized to [0, 255]
-        '''
+    def forward(self, x: torch.Tensor):
+        """
+        Args:
+        - x: input image in pixel space [0, 255]
+        Returns:
+        - ret: model output in unit space [0, 1]
+        """
         x = self.transform(x)
         # x is now normalized as the model expects
-        x = self.model(x)
-        return x
+        ret = self.model(x)
+        return ret
 
 class AttackWrapper(nn.Module):
     def __init__(self, resol):
