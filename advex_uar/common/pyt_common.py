@@ -53,7 +53,7 @@ def get_model(dataset, resnet_size, nb_classes):
         return get_cifar10_model(resnet_size)
 
 def _get_attack(dataset, attack, eps, n_iters, step_size, scale_each):
-    if dataset in ['imagenet', 'imagenet-c']:
+    if dataset in ['imagenet', 'imagenet-c', 'imagenet100']:
         resol = 224
         elastic_kernel = 25
         elastic_std = 3
@@ -61,6 +61,8 @@ def _get_attack(dataset, attack, eps, n_iters, step_size, scale_each):
         resol = 32
         elastic_kernel = 5
         elastic_std = 3.0/224.0 * 32
+    else:
+        raise ValueError
 
     if attack == 'pgd_linf':
         return functools.partial(PGDAttack, n_iters, eps,
