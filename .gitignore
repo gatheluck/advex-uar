@@ -107,3 +107,6 @@ venv.bak/
 logs
 tests/out/*
 wandb
+
+# editor
+.vscode
