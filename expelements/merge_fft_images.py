@@ -51,7 +51,7 @@ def main(**kwargs):
         out = torch.cat(outs, dim=-2) 
 
         # save  
-        savename = '{idx:06d}_merge.png'.format(idx)
+        savename = '{idx:06d}_merge.png'.format(idx=idx)
         savepath = os.path.join(flags.log_root, savename)
         torchvision.utils.save_image(out, savepath)
         raise NotImplementedError
