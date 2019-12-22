@@ -106,3 +106,4 @@ venv.bak/
 # log output
 logs
 tests/out/*
+wandb
